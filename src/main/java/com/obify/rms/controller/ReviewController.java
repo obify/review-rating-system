@@ -16,13 +16,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
-@NoArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/rms/api/v1/reviews")
 public class ReviewController {
 
+    @Autowired
     private ReviewService reviewService;
 
     @PostMapping
@@ -30,17 +29,15 @@ public class ReviewController {
         review = reviewService.addReview(review);
         return new ResponseEntity<>(review, HttpStatus.CREATED);
     }
-    @PostMapping("/all")
-    public ResponseEntity<List<ReviewEntity>> getReviews(@RequestBody RequestReviewDTO requestReviewDTO){
+    @PostMapping("/retrieve")
+    public ResponseEntity<List<ReviewDTO>> getReviews(@RequestBody RequestReviewDTO requestReviewDTO){
         Pageable pageable = PageRequest.of(requestReviewDTO.getPageNo(), requestReviewDTO.getPageSize());
-        List<ReviewEntity> reviews = reviewService.getReviews(requestReviewDTO.getOrganizationId(), requestReviewDTO.getStatus(), pageable);
+        List<ReviewDTO> reviews = reviewService.getReviews(requestReviewDTO.getOrganizationId(), requestReviewDTO.getStatus(), pageable);
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
-    @PatchMapping("/{reviewId}")
-    public ResponseEntity<ReviewEntity> updateStatus(@PathVariable String reviewId, @RequestBody ReviewDTO reviewDTO){
-        ReviewEntity re = reviewRepository.findById(reviewId).get();
-        re.setStatus(reviewDTO.getStatus());
-        re = reviewRepository.save(re);
-        return new ResponseEntity<>(re, HttpStatus.OK);
+    @PatchMapping
+    public ResponseEntity<ReviewDTO> updateStatus(@RequestBody RequestReviewDTO requestReviewDTO){
+        ReviewDTO reviewDTO = reviewService.updateStatus(requestReviewDTO);
+        return new ResponseEntity<>(reviewDTO, HttpStatus.OK);
     }
 }

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RequestReviewDTO {
     private Long organizationId;
+    private Long reviewId;
     private String status;
     private int pageNo;
     private int pageSize;

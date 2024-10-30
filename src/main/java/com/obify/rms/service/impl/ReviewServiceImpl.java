@@ -1,6 +1,7 @@
 package com.obify.rms.service.impl;
 
 import com.obify.rms.dto.ErrorDTO;
+import com.obify.rms.dto.RequestReviewDTO;
 import com.obify.rms.dto.ReviewDTO;
 import com.obify.rms.entity.ReviewEntity;
 import com.obify.rms.exception.BusinessException;
@@ -9,6 +10,7 @@ import com.obify.rms.service.ReviewService;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,11 +19,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
-@NoArgsConstructor
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
+    @Autowired
     private ReviewRepository reviewRepository;
 
     @Override
@@ -35,13 +36,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewDTO updateStatus(ReviewDTO dto) {
-        ReviewEntity re = reviewRepository.findById(dto.getId())
+    public ReviewDTO updateStatus(RequestReviewDTO dto) {
+        ReviewEntity re = reviewRepository.findById(dto.getReviewId())
                 .orElseThrow(()->new BusinessException(List.of(new ErrorDTO("NOT_FOUND", "Review id not found"))));
         re.setStatus(dto.getStatus());
         re = reviewRepository.save(re);
-        BeanUtils.copyProperties(re, dto);
-        return dto;
+        ReviewDTO reviewDTO = new ReviewDTO();
+        BeanUtils.copyProperties(re, reviewDTO);
+        return reviewDTO;
     }
 
     @Override
