@@ -5,6 +5,7 @@ import com.obify.rms.dto.ReviewDTO;
 import com.obify.rms.entity.ReviewEntity;
 import com.obify.rms.repository.ReviewRepository;
 import com.obify.rms.service.ReviewService;
+import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<ReviewDTO> addReview(@RequestBody ReviewDTO review){
+    public ResponseEntity<ReviewDTO> addReview(@Valid @RequestBody ReviewDTO review){
         review = reviewService.addReview(review);
         return new ResponseEntity<>(review, HttpStatus.CREATED);
     }
