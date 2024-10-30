@@ -1,7 +1,7 @@
 package com.obify.rms.repository;
 
 import com.obify.rms.entity.OrganizationEntity;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrganizationRepository extends MongoRepository<OrganizationEntity, String> {
+public interface OrganizationRepository extends JpaRepository<OrganizationEntity, Long> {
 }

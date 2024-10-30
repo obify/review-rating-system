@@ -1,18 +1,24 @@
 package com.obify.rms.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "organization")
+@Setter
+@Getter
 @NoArgsConstructor
-@Document(collection = "organization")
 public class OrganizationEntity {
 
     @Id
-    private String id;
-    private String orgName;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String name;
+    private String email;
+    private String phone;
+    private LocalDate createdAt;
 }
