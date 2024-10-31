@@ -18,13 +18,10 @@ import java.time.LocalDate;
 public class OrganizationDTO {
     private Long id;
     @NotNull(message = "Organization name is mandatory")
-    @NotEmpty(message = "Organization name cannot be empty")
     private String name;
     @NotNull(message = "Organization email is mandatory")
-    @NotEmpty(message = "Organization email cannot be empty")
     private String email;
     @NotNull(message = "Organization phone is mandatory")
-    @NotEmpty(message = "Organization phone cannot be empty")
     private String phone;
     private LocalDate createdAt;
 }

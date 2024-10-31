@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/rms/api/v1/reviews")
+@Validated
 public class ReviewController {
 
     @Autowired
@@ -37,7 +39,7 @@ public class ReviewController {
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
     @PatchMapping
-    public ResponseEntity<ReviewDTO> updateStatus(@RequestBody RequestReviewDTO requestReviewDTO){
+    public ResponseEntity<ReviewDTO> updateStatus(@Valid @RequestBody RequestReviewDTO requestReviewDTO){
         ReviewDTO reviewDTO = reviewService.updateStatus(requestReviewDTO);
         return new ResponseEntity<>(reviewDTO, HttpStatus.OK);
     }
