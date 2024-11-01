@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,21 +17,27 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
 @Slf4j
 @Component
-public class CustomAuthenticationFilter extends GenericFilterBean {
+public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver resolver;
+
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, IOException {
         try{
-            Authentication authentication = authenticationService.getAuthentication((HttpServletRequest) servletRequest);
+            Authentication authentication = authenticationService.getAuthentication(request);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (BadCredentialsException e) {
 //            HttpServletResponse response = (HttpServletResponse) servletResponse;
@@ -41,7 +48,8 @@ public class CustomAuthenticationFilter extends GenericFilterBean {
 //            writer.flush();
 //            writer.close();
               log.error(e.getMessage());
+            resolver.resolveException(request, response, null, e);
         }
-        filterChain.doFilter(servletRequest, servletResponse);
+        filterChain.doFilter(request, response);
     }
 }
