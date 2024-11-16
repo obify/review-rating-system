@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "review")
@@ -20,5 +21,5 @@ public class ReviewEntity {
     private String review;
     private Long organizationId;
     private String status;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 }

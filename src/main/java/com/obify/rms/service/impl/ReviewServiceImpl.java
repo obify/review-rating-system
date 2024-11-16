@@ -17,9 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,47 +38,58 @@ public class ReviewServiceImpl implements ReviewService {
             ReviewResponseDTO dto = null;
             Long count = reviewRepository.countByOrganizationIdAndProductIdContainingAndRatingBetween( optRe.get().getId(), productId,0.0f, 1.0f);
             dto = new ReviewResponseDTO();
-            dto.setRating("0-1");
+            dto.setRating(1.0f);
             dto.setCount(count);
+            dto.setComment("Very Poor");
             reviewCounts.add(dto);
 
-            count = reviewRepository.countByOrganizationIdAndProductIdContainingAndRatingBetween( optRe.get().getId(), productId,1.0f, 2.0f);
+            count = reviewRepository.countByOrganizationIdAndProductIdContainingAndRatingBetween( optRe.get().getId(), productId,1.1f, 2.0f);
             dto = new ReviewResponseDTO();
-            dto.setRating("1-2");
+            dto.setRating(2.0f);
             dto.setCount(count);
+            dto.setComment("Poor");
             reviewCounts.add(dto);
 
-            count = reviewRepository.countByOrganizationIdAndProductIdContainingAndRatingBetween( optRe.get().getId(),productId,2.0f, 3.0f);
+            count = reviewRepository.countByOrganizationIdAndProductIdContainingAndRatingBetween( optRe.get().getId(),productId,2.1f, 3.0f);
             dto = new ReviewResponseDTO();
-            dto.setRating("2-3");
+            dto.setRating(3.0f);
             dto.setCount(count);
+            dto.setComment("Average");
             reviewCounts.add(dto);
 
-            count = reviewRepository.countByOrganizationIdAndProductIdContainingAndRatingBetween( optRe.get().getId(),productId,3.0f, 4.0f);
+            count = reviewRepository.countByOrganizationIdAndProductIdContainingAndRatingBetween( optRe.get().getId(),productId,3.1f, 4.0f);
             dto = new ReviewResponseDTO();
-            dto.setRating("3-4");
+            dto.setRating(4.0f);
             dto.setCount(count);
+            dto.setComment("Good");
             reviewCounts.add(dto);
 
-            count = reviewRepository.countByOrganizationIdAndProductIdContainingAndRatingBetween( optRe.get().getId(),productId,4.0f, 5.0f);
+            count = reviewRepository.countByOrganizationIdAndProductIdContainingAndRatingBetween( optRe.get().getId(),productId,4.1f, 5.0f);
             dto = new ReviewResponseDTO();
-            dto.setRating("4-5");
+            dto.setRating(5.0f);
             dto.setCount(count);
+            dto.setComment("Excellent");
             reviewCounts.add(dto);
         }
+        Collections.sort(reviewCounts, new Comparator<ReviewResponseDTO>() {
+            @Override
+            public int compare(ReviewResponseDTO u1, ReviewResponseDTO u2) {
+                return u2.getRating().compareTo(u1.getRating());
+            }
+        });
         return reviewCounts;
     }
 
     @Override
     public ReviewDTO addReview(ReviewDTO dto) {
-        Optional<ReviewEntity> optRe = reviewRepository.findByOrganizationIdAndUserIdContaining(dto.getOrganizationId(), dto.getUserId());
+        Optional<ReviewEntity> optRe = reviewRepository.findByOrganizationIdAndProductIdContainingAndUserIdContaining(dto.getOrganizationId(), dto.getProductId(), dto.getUserId());
                 //.orElseThrow(()->new BusinessException(List.of(new ErrorDTO("DUP_REVIEW_001", "User has already provided review"))));
         if(optRe.isPresent()){
             throw new BusinessException(List.of(new ErrorDTO("DUP_REVIEW_001", "User has already provided review")));
         }else {
             ReviewEntity re = new ReviewEntity();
             BeanUtils.copyProperties(dto, re);
-            re.setCreatedAt(LocalDate.now());
+            re.setCreatedAt(LocalDateTime.now());
             re = reviewRepository.save(re);
             BeanUtils.copyProperties(re, dto);
         }
@@ -110,6 +120,12 @@ public class ReviewServiceImpl implements ReviewService {
         }else{
             throw new BusinessException(List.of(new ErrorDTO("NOT_FOUND", "No reviews found for the product")));
         }
+        Collections.sort(dtoList, new Comparator<ReviewDTO>() {
+            @Override
+            public int compare(ReviewDTO u1, ReviewDTO u2) {
+                return u2.getCreatedAt().compareTo(u1.getCreatedAt());
+            }
+        });
         return dtoList;
     }
 }

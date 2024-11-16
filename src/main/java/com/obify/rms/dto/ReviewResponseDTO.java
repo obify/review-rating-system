@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ReviewResponseDTO {
-    private String rating;
+    private Float rating;
+    private String comment;
     private Long count;
 }

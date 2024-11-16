@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     Long countByOrganizationIdAndProductIdContainingAndRatingBetween(Long organizationId, String productId, Float value1, Float value2);
-    Optional<ReviewEntity> findByOrganizationIdAndUserIdContaining(Long organizationId, String userId);
+    Optional<ReviewEntity> findByOrganizationIdAndProductIdContainingAndUserIdContaining(Long organizationId, String productId, String userId);
     Page<ReviewEntity> findAllByOrganizationIdAndProductIdAndStatusContainsOrderByCreatedAtAsc(Long organizationId, String productId, String status, Pageable pageable);
 }

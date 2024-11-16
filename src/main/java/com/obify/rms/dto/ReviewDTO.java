@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -29,5 +30,5 @@ public class ReviewDTO {
     private Long organizationId;
     @NotNull(message = "Status is mandatory")
     private String status;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 }
