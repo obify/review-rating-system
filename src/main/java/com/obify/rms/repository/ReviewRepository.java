@@ -5,6 +5,10 @@ import org.springframework.data.domain.Pageable;
 import com.obify.rms.entity.ReviewEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
-    Page<ReviewEntity> findAllByOrganizationIdAndStatusContainsOrderByCreatedAtAsc(Long organizationId, String status, Pageable pageable);
+    Long countByOrganizationIdAndProductIdContainingAndRatingBetween(Long organizationId, String productId, Float value1, Float value2);
+    Optional<ReviewEntity> findByOrganizationIdAndUserIdContaining(Long organizationId, String userId);
+    Page<ReviewEntity> findAllByOrganizationIdAndProductIdAndStatusContainsOrderByCreatedAtAsc(Long organizationId, String productId, String status, Pageable pageable);
 }

@@ -21,4 +21,6 @@ public class OrganizationEntity {
     private String email;
     private String phone;
     private LocalDate createdAt;
+    private String apiKey;
+    private boolean active;
 }

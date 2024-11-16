@@ -24,4 +24,6 @@ public class OrganizationDTO {
     @NotNull(message = "Organization phone is mandatory")
     private String phone;
     private LocalDate createdAt;
+    private String apiKey;
+    private boolean active;
 }

@@ -12,17 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RequestReviewDTO {
-    @NotNull(message = "Organization Id is mandatory")
-    private Long organizationId;
-    @NotNull(message = "Review Id is mandatory")
-    private Long reviewId;
+public class RequestReviewCountDTO {
     @NotNull(message = "Product Id is mandatory")
     private String productId;
-    @NotNull(message = "Api Key is mandatory")
-    private String apiKey;
-    @NotNull(message = "Status is mandatory")
-    private String status;
-    private int pageNo;
-    private int pageSize;
 }

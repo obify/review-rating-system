@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +38,14 @@ public class CustomExceptionHandler {
     public ResponseEntity<List<ErrorDTO>> handleBusinessException(BusinessException bex) {
         return new ResponseEntity<>(bex.getErrors(), HttpStatus.BAD_REQUEST);
     }
-
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<List<ErrorDTO>> handleAccessDenied(AccessDeniedException bex) {
+        List<ErrorDTO> errors = List.of(new ErrorDTO("401", bex.getMessage()));
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<List<ErrorDTO>> handleBadCredentials(BadCredentialsException bex) {
         List<ErrorDTO> errors = List.of(new ErrorDTO("401", bex.getMessage()));
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errors, HttpStatus.UNAUTHORIZED);
     }
 }

@@ -18,7 +18,7 @@ public class OrganizationController {
     @Autowired
     private OrganizationService organizationService;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<OrganizationDTO> addOrganization(@Valid @RequestBody OrganizationDTO organization){
         organization = organizationService.addOrganization(organization);
         return new ResponseEntity<>(organization, HttpStatus.CREATED);
